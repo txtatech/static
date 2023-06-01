@@ -30,6 +30,6 @@ Assigning the worker to null was done intentionally for security purposes.
 
 **Notes:**
 
-Once the QR codes have been 'cached' (and their code executed) the page should be written to memory, the cache and as a binary string in the browser. After the Qr codes are cached any edits made to the html files will not be reflected until the previous versions are manually purged.
+Once the QR codes have been 'cached' (and their code executed) the page should be written to memory, the cache and as a binary string in the browser. After the Qr codes are cached any edits made to the html files will not be reflected until the previous versions are manually purged from the afore-mentioned places in the browser.
  
 Only the QR codes with the name schema of 'commands-' work properly. The QR codes with the name schema of 'nodebase64-' I never got to work properly.  
