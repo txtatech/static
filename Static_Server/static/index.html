@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+  <h1>Self-Constructing Webpage/Server</h1>
+  <div>
+    <img class="photo" src="net234a.gif" alt="net234a" style="width: 5%; height: 5%;" />
+</div>
+<head>
+  <title>Console Output:</title>
+</head>
+<body>
+  <h1>Console output:</h1>
+  <div id="output"></div>
+  <script>
+    // Log some messages to the console
+    console.log('Hello, console!');
+    console.warn('This is a warning');
+    console.error('This is an error');
+    console.dir({ key: 'value' });
+
+    // Display the console output on the page
+    var output = document.getElementById('output');
+    var log = console.log;
+    console.log = function(message) {
+      log.apply(console, arguments);
+      output.innerHTML += '<pre>' + message + '</pre>';
+    }
+
+    var warn = console.warn;
+    console.warn = function(message) {
+      warn.apply(console, arguments);
+      output.innerHTML += '<pre style="color: orange;">' + message + '</pre>';
+    }
+
+    var error = console.error;
+    console.error = function(message) {
+      error.apply(console, arguments);
+      output.innerHTML += '<pre style="color: red;">' + message + '</pre>';
+    }
+  </script>
+  <script>
+
+console.log('PHNjcmlwdD5cbiAgICAgICAgIC8vIENoZWNrIGlmIHRoZSBzZXJ2aWNlIHdvcmtlciBpcyBzdXBwb3J0ZWQgaW4gdGhlIGJyb3dzZXIuXG4gICAgICAgICBpZiAod2luZG93LlNlcnZpY2VXb3JrZXIpIHtcbiAgICAgICAgICAgLy8gU3Vic2NyaWJlIHRvIHRoZSAncG9sbCcgZXZlbnQuXG4gICAgICAgICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdwb2xsJywgZnVuY3Rpb24oKSB7XG4gICAgICAgICAgICAgY29uc29sZS5sb2coJ1BvbGxpbmcgZm9yIHVwZGF0ZXMnKTtcbiAgICAgICAgICAgfSk7XG4gICAgICAgIH1cbiAgICAgPC9zY3JpcHQ+');
+console.dir = function(object) {
+  console.dir.apply(console, arguments);
+  output.innerHTML += '<pre>' + object + '</pre>';
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TinyWeb Server</title>
+  <script src="tinyweb.js"></script>
+    <script src="webber.js"></script>
+        <script src="worker.js"></script>
+  <script type="text/javascript" src="qrcode.js"></script>
+  <script src="jsQR.js"></script>
+  <body onload="GetAsyncData()">
+  <style>
+      pre {
+        white-space: pre;
+        font-family: monospace;
+      }
+    </style>
+          <style>
+    #qr-code-data img {
+      width: 1%;
+      height: 1%;
+    }
+  </style>
+  <title>Show Console Output</title>
+<a href="images.html">Cache Qr Codes</a>
+<a href="./images">Qr Code Archive</a>
+</head>
+<body>
+<script>
+      (function(){
+  'use strict';
+
+  const LOCALHOST_URL = "http://localhost:8080";
+const PRODUCTION_URL = "http://localhost:3000";
+
+
+self.addEventListener('fetch', function(event) {
+  const requestURL = event.request.url;
+
+  if (isStyleOrScriptRequest(requestURL)) {
+    let localURL = serveFromLocalhost(requestURL);
+    localURL = removeURLParams(localURL);
+    localURL = removeCacheKey(localURL);
+
+    console.info('Fetching: ', localURL);
+
+    event.respondWith(
+      fetch(localURL)
+        .catch(e => {
+          console.error('Error:' ,e);
+          return new Response("Service Unavailable", {
+            status: 500,
+            statusText: `Asset is unavailable on ${LOCALHOST_URL}`,
+            headers: new Headers({ "Content-Type": "text/plain"})
+          })
+        })
+    );
+  }
+  else if (isAssetServedFromLocalhost(requestURL)){
+    let localURL = serveFromLocalhost(requestURL);
+    console.info('Fetching local asset from localhost: ',localURL);
+    return event.respondWith(fetch(localURL));
+  }
+  else{
+    return fetch(event.request);
+  }
+});
+
+self.addEventListener('message', event => {
+  const { action, localhostUrl, productionUrl } = event.data;
+
+  if (action === 'updateVariables') {
+    LOCALHOST_URL = localhostUrl;
+    PRODUCTION_URL = productionUrl;
+  }
+});
+
+function serveFromLocalhost(url){
+  return url.replace(PRODUCTION_URL, LOCALHOST_URL);
+}
+
+function removeURLParams(url){
+  return url.replace(/\?.*/g,'');
+}
+
+function removeCacheKey(url) {
+  return url.replace(/-[a-zA-Z0-9]{20,}\.(css|js)/g,'.$1');
+}
+
+function isAssetServedFromLocalhost(url) {
+  return url.match(/\/assets\/.*\.(jpg|jpeg|woff|ttf|png|svg|mp3|mp4|wav)/);
+}
+
+function isStyleOrScriptRequest(url) {
+  return url.match(/\.(css|js)/)
+}
+
+
+      }());
+</script>
+<script>
+	const pages = ['index1.html', 'page1.html', 'page2.html', 'page3.html', 'page4.html', 'images.html']; // list of all the pages in your webpage
+
+pages.forEach(page => {
+  // send an HTTP HEAD request to the page to check if it exists
+  fetch(page, {method: 'HEAD'}).then(response => {
+    if (response.ok) { // if the page exists, do nothing
+      return;
+    } else { // if the page does not exist, alter the DOM to display an error message
+      const errorMessage = document.createElement('p');
+      errorMessage.innerText = `Error: ${page} could not be accessed.`;
+      document.body.appendChild(errorMessage);
+    }
+  });
+});
+	</script>
+	<script>
+  // Get the root URL of your website
+  const rootUrl = window.location.origin;
+
+  // Get the list of pages in your website
+  const pages1 = ['http://localhost/index1.html', 'http://localhost/page1.html', 'http://localhost/page2.html', 'http://localhost/page3.html', 'http://localhost/page4.html', 'http://localhost/images/images.html'];
+
+  // Iterate through the pages
+  for (let page of pages) {
+    // Create a new link element
+    const link = document.createElement('a');
+
+    // Set the href of the link to the root URL plus the page URL
+    link.setAttribute('href', rootUrl + '/' + page);
+
+    // Set the text content of the link to the page name
+    link.textContent = page;
+
+    // Append the link to the body of the page
+    document.body.appendChild(link);
+  }
+
+</script>
+	<script>
+	function displayUrls() {
+  var urlElements = document.querySelectorAll('[href], [src]');
+  var urls = [];
+
+  for (var i = 0; i < urlElements.length; i++) {
+    var url = urlElements[i].getAttribute('href') || urlElements[i].getAttribute('src');
+    urls.push(url);
+  }
+
+  console.log('URLs: ', urls);
+}
+
+displayUrls();
+</script>
+  <script>
+  self.addEventListener('fetch', function(event) {
+  // Check if the request URL matches one of the assets that you precached
+  if (event.request.url.startsWith('http://localhost:8080/')) {
+    // Serve the asset from the cache
+    event.respondWith(caches.match(event.request));
+  }
+});
+</script>
+
+<link rel="preload" href="./images.html" as="document" />
+<script>
+fetch('images.html')
+  .then(response => response.text())
+  .then(html => {
+    // Add the HTML to the main page
+    document.body.insertAdjacentHTML('beforeend', html);
+  });
+</script>
+<link rel="preload" href="./page4.html" as="document" />
+<script>
+fetch('page4.html')
+  .then(response => response.text())
+  .then(html => {
+    // Add the HTML to the main page
+    document.body.insertAdjacentHTML('beforeend', html);
+  });
+</script>
+
+</body>
+
+</html>
+<script>
+const observer = new PerformanceObserver((list) => {
+  // Get the first (and only) entry in the list
+  const entry = list.getEntries()[0];
