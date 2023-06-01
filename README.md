@@ -1,5 +1,5 @@
 # static
-An experimental self-constructing website/server that utilizes Base64 encoded javascript code which is itself encoded as QR-Codes.
+An experimental self-constructing website/server that utilizes Base64 encoded JavaScript code which is itself encoded as QR-Codes.
 
 This project is very experimental so beware!
 
