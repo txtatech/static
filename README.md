@@ -23,7 +23,7 @@ Once the initial page loads open Developer Tools in your browser and switch to C
 
 Click the 'Cache QR Codes' link on the page. (The page named index.html)
 
-Watch in the Developer Tools as the QR codes are 'cached'. (This is reading the contents of the QR codes and extracting the code within them).
+Watch in the Developer Tools as the QR codes are 'cached'. This is reading the contents of the QR codes and extracting the code within them which can take some time to finsih so be patient.
 
 You should see the scripts loaded and note that it starts (or attempts to start) a service-worker but fails because it is set to null. 
 Assigning the worker to null was done intentionally for security purposes. 
