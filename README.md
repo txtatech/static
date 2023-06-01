@@ -1,5 +1,5 @@
 # static
-An experimental self-constructing website/server that utilizes Base64 encoded javascript code which is itself encoded as QR codes.
+An experimental self-constructing website/server that utilizes Base64 encoded javascript code which is itself encoded as QR-Codes.
 
 This project is very experimental so beware!
 
@@ -23,13 +23,13 @@ Once the initial page loads open Developer Tools in your browser and switch to C
 
 Click the 'Cache QR Codes' link on the page. (The page named index.html)
 
-Watch in the Developer Tools as the QR codes are 'cached'. This is reading the contents of the QR codes and extracting the code within them which can take some time to finsih so be patient.
+Watch in the Developer Tools as the QR-Codes are 'cached'. This is reading the contents of the QR-Codes and extracting the code within them which can take some time to finsih so be patient.
 
 You should see the scripts loaded and note that it starts (or attempts to start) a service-worker but fails because it is set to null. 
 Assigning the worker to null was done intentionally for security purposes. 
 
 **Notes:**
 
-Once the QR codes have been 'cached' (and their code executed) the page should be written to memory, the cache and as a binary string in the browser. After the Qr codes are cached any edits made to the html files will not be reflected until the previous versions are manually purged from the afore-mentioned places in the browser.
+Once the QR-Codes have been 'cached' (and their code executed) the page should be written to memory, the cache and as a binary string in the browser. After the QR-Codes are cached any edits made to the html files will not be reflected until the previous versions are manually purged from the afore-mentioned places in the browser.
  
-Only the QR codes with the name schema of 'commands-' work properly. The QR codes with the name schema of 'nodebase64-' I never got to work properly.  
+Only the QR-Codes with the name schema of 'commands-' work properly. The QR-Codes with the name schema of 'nodebase64-' I never got to work properly.  
